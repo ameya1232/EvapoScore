@@ -146,7 +146,13 @@ async function loadCitiesData() {
                 `Analyzing ${city.name} (${i + 1}/${capitalCities.length})...`;
 
             const climate = estimateClimateData(city.lat, city.lon);
-            const power = evapCalc.estimatePowerFromClimateaverages(climate);
+            let power = evapCalc.estimatePowerFromClimateaverages(climate);
+            
+            // Use measured data for Beirut if available
+            if (city.measuredData && city.name === 'Beirut') {
+                power = city.measuredData.mean;
+            }
+            
             const category = evapCalc.getPowerCategory(power);
 
             citiesData.push({
@@ -156,7 +162,7 @@ async function loadCitiesData() {
                 category: category
             });
 
-            await new Promise(resolve => setTimeout(resolve, 5));
+            await new Promise(resolve => setTimeout(resolve, 2));
         }
 
         citiesData.sort((a, b) => b.power - a.power);
@@ -164,6 +170,7 @@ async function loadCitiesData() {
 
         createMarkers();
         createHeatmapLayer();
+        createCountryGradients();
         updateStatistics();
 
     } catch (error) {
@@ -199,6 +206,7 @@ function createMarkers() {
                 </h3>
                 <div style="background: rgba(102, 126, 234, 0.1); padding: 10px; border-radius: 6px; margin-bottom: 10px;">
                     <p style="margin: 5px 0; font-size: 16px;"><strong>Power Potential:</strong> <span style="color: ${city.category.color}; font-weight: bold;">${city.power.toFixed(1)} W/m²</span></p>
+                    ${city.measuredData ? `<p style="margin: 5px 0; font-size: 12px; color: #888;">Measured: Mean ${city.measuredData.mean} W/m² (Range: ${city.measuredData.min}-${city.measuredData.max}, σ=${city.measuredData.stdDev})</p>` : ''}
                     <p style="margin: 5px 0;"><strong>Rating:</strong> ${city.category.label}</p>
                 </div>
                 <p style="font-size: 12px; margin: 8px 0;"><strong>Population:</strong> ${city.population.toLocaleString()}</p>
@@ -251,17 +259,16 @@ function createMarkers() {
             // Reset marker size but keep it visible
             el.style.transform = 'scale(1)';
             el.style.zIndex = '1';
+            el.style.display = 'block';
+            el.style.visibility = 'visible';
 
-            // Delay popup removal to allow moving to popup
+            // Immediately remove popup when leaving marker
             hoverTimeout = setTimeout(() => {
                 if (popup.isOpen()) {
-                    const popupEl = popup.getElement();
-                    if (!popupEl || !popupEl.matches(':hover')) {
-                        popup.remove();
-                        currentPopup = null;
-                    }
+                    popup.remove();
+                    currentPopup = null;
                 }
-            }, 300);
+            }, 100);
         });
 
         // Keep popup open when hovering over it
@@ -277,6 +284,9 @@ function createMarkers() {
                 });
 
                 popupEl.addEventListener('mouseleave', () => {
+                    if (hoverTimeout) {
+                        clearTimeout(hoverTimeout);
+                    }
                     popup.remove();
                     currentPopup = null;
                 });
@@ -430,6 +440,127 @@ function toggleHeatmap() {
             element.style.visibility = 'visible';
         }
     });
+}
+
+function createCountryGradients() {
+    if (!citiesData || citiesData.length === 0) return;
+    
+    const topPowerCities = citiesData.slice(0, 10).map(c => ({
+        lon: c.lon,
+        lat: c.lat,
+        power: c.power
+    }));
+    
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371;
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                  Math.sin(dLon/2) * Math.sin(dLon/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return R * c;
+    }
+    
+    function getNearestHighPowerCity(lat, lon) {
+        let minDist = Infinity;
+        let nearestPower = 0;
+        
+        topPowerCities.forEach(city => {
+            const dist = calculateDistance(lat, lon, city.lat, city.lon);
+            if (dist < minDist) {
+                minDist = dist;
+                nearestPower = city.power;
+            }
+        });
+        
+        return { distance: minDist, power: nearestPower };
+    }
+    
+    const gradientPoints = [];
+    const step = 5;
+    
+    for (let lat = -90; lat <= 90; lat += step) {
+        for (let lon = -180; lon <= 180; lon += step) {
+            const nearest = getNearestHighPowerCity(lat, lon);
+            const influence = Math.max(0, 1 - nearest.distance / 5000);
+            const powerEstimate = nearest.power * influence;
+            
+            gradientPoints.push({
+                type: 'Feature',
+                geometry: {
+                    type: 'Point',
+                    coordinates: [lon, lat]
+                },
+                properties: {
+                    power: powerEstimate,
+                    distance: nearest.distance
+                }
+            });
+        }
+    }
+    
+    if (map.getSource('country-gradients')) {
+        map.getSource('country-gradients').setData({
+            type: 'FeatureCollection',
+            features: gradientPoints
+        });
+    } else {
+        map.addSource('country-gradients', {
+            type: 'geojson',
+            data: {
+                type: 'FeatureCollection',
+                features: gradientPoints
+            }
+        });
+        
+        map.addLayer({
+            id: 'country-gradients',
+            type: 'heatmap',
+            source: 'country-gradients',
+            paint: {
+                'heatmap-weight': [
+                    'interpolate',
+                    ['linear'],
+                    ['get', 'power'],
+                    0, 0,
+                    50, 0.1,
+                    100, 0.3,
+                    150, 0.5,
+                    200, 0.7,
+                    300, 1
+                ],
+                'heatmap-intensity': [
+                    'interpolate',
+                    ['linear'],
+                    ['zoom'],
+                    0, 0.3,
+                    5, 0.5,
+                    10, 1
+                ],
+                'heatmap-color': [
+                    'interpolate',
+                    ['linear'],
+                    ['heatmap-density'],
+                    0, 'rgba(69, 117, 180, 0)',
+                    0.2, 'rgba(145, 191, 219, 0.3)',
+                    0.4, 'rgba(254, 224, 144, 0.4)',
+                    0.6, 'rgba(252, 141, 89, 0.5)',
+                    0.8, 'rgba(215, 48, 39, 0.6)',
+                    1, 'rgba(178, 24, 43, 0.7)'
+                ],
+                'heatmap-radius': [
+                    'interpolate',
+                    ['linear'],
+                    ['zoom'],
+                    0, 20,
+                    5, 40,
+                    10, 80
+                ],
+                'heatmap-opacity': 0.4
+            }
+        });
+    }
 }
 
 async function fetchWeatherData(lat, lon, startDate, endDate) {

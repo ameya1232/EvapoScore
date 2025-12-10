@@ -126,7 +126,7 @@ const capitalCities = [
     { name: "Manama", country: "Bahrain", lat: 26.2285, lon: 50.5860, continent: "Asia", population: 565000 },
     { name: "Jerusalem", country: "Israel", lat: 31.7683, lon: 35.2137, continent: "Asia", population: 936425 },
     { name: "Tel Aviv", country: "Israel", lat: 32.0853, lon: 34.7818, continent: "Asia", population: 4432500 },
-    { name: "Beirut", country: "Lebanon", lat: 33.8886, lon: 35.4955, continent: "Asia", population: 2407355 },
+    { name: "Beirut", country: "Lebanon", lat: 33.89, lon: 35.50, continent: "Asia", population: 2407355, measuredData: { mean: 107, min: 44, max: 185, stdDev: 34.9 } },
     { name: "Damascus", country: "Syria", lat: 33.5138, lon: 36.2765, continent: "Asia", population: 2354000 },
     { name: "Amman", country: "Jordan", lat: 31.9454, lon: 35.9284, continent: "Asia", population: 4536000 },
     { name: "Kabul", country: "Afghanistan", lat: 34.5553, lon: 69.2075, continent: "Asia", population: 4601789 },
