@@ -938,5 +938,23 @@ P/A = c_e · E_pr · R · T_air · ln(RH_wet / RH_air)
             <p style="margin-top: 10px;">For more information and source code, visit <a href="https://github.com/ameya1232/EvapoScore" style="color: #667eea;">GitHub Repository</a></p>
         </div>
     </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+
+        function downloadPDF() {
+            window.open('RESEARCH_REPORT.md', '_blank');
+            alert('To generate PDF: Open RESEARCH_REPORT.md in a markdown viewer and use Print to PDF, or use the generate_pdf.sh script.');
+        }
+
+        function downloadExcel() {
+            alert('Excel download available on the main map page. Please visit the Home page.');
+        }
+    </script>
 </body>
 </html>
