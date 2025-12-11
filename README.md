@@ -18,7 +18,7 @@ It's based on a competition project I worked on, and I thought it'd be useful to
 
 ## Features
 
-- **Interactive Map**: Explore 100+ capital cities worldwide
+- **Interactive Map**: Explore 250+ cities worldwide
 - **Real-time Calculations**: Power potential calculated using the Penman Equation
 - **Color-coded Markers**: Visual indication of power potential
   - Red: Excellent (>200 W/m²)
@@ -51,7 +51,7 @@ open index.html    # on Mac
 ```
 EvapoScore/
 ├── index.html              # Main HTML file
-├── capitals-data.js        # Capital cities dataset (100+ cities)
+├── capitals-data.js        # Cities dataset (250+ cities)
 ├── evaporation-calc.js     # Penman equation implementation
 ├── map.js                  # MapLibre visualization logic
 └── README.md              # This file

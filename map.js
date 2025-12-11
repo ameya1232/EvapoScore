@@ -143,7 +143,7 @@ async function loadCitiesData() {
             const city = capitalCities[i];
 
             loadingEl.querySelector('p').textContent =
-                `Analyzing ${city.name} (${i + 1}/${capitalCities.length})...`;
+                `Analyzing ${city.name} (${i + 1}/250+)...`;
 
             const climate = estimateClimateData(city.lat, city.lon);
             let power = evapCalc.estimatePowerFromClimateaverages(climate);
