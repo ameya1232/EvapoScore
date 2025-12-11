@@ -181,12 +181,6 @@ async function loadCitiesData() {
 
 function createMarkers() {
     citiesData.forEach(city => {
-        // Create wrapper to prevent positioning issues
-        const wrapper = document.createElement('div');
-        wrapper.style.position = 'relative';
-        wrapper.style.width = '0';
-        wrapper.style.height = '0';
-        
         const el = document.createElement('div');
         el.className = 'marker';
 
@@ -205,13 +199,6 @@ function createMarkers() {
         el.style.transition = 'transform 0.2s ease';
         el.style.transformOrigin = 'center center';
         el.style.display = 'block';
-        el.style.position = 'absolute';
-        el.style.left = '50%';
-        el.style.top = '50%';
-        el.style.marginLeft = `-${size/2}px`;
-        el.style.marginTop = `-${size/2}px`;
-        
-        wrapper.appendChild(el);
 
         // Create popup content
         const popupContent = `
@@ -250,14 +237,14 @@ function createMarkers() {
         let hoverTimeout = null;
 
         // Show popup on hover
-        wrapper.addEventListener('mouseenter', () => {
+        el.addEventListener('mouseenter', () => {
             // Clear any pending hide timeout
             if (hoverTimeout) {
                 clearTimeout(hoverTimeout);
                 hoverTimeout = null;
             }
 
-            // Scale marker without affecting position
+            // Scale marker - MapLibre handles positioning
             el.style.transform = 'scale(1.5)';
             el.style.zIndex = '1000';
 
@@ -268,7 +255,7 @@ function createMarkers() {
             currentPopup = popup;
         });
 
-        wrapper.addEventListener('mouseleave', () => {
+        el.addEventListener('mouseleave', () => {
             // Reset marker size
             el.style.transform = 'scale(1)';
             el.style.zIndex = '1';
@@ -302,12 +289,15 @@ function createMarkers() {
             }
         });
 
-        const marker = new maplibregl.Marker({ element: wrapper })
+        const marker = new maplibregl.Marker({ 
+            element: el,
+            anchor: 'center'
+        })
             .setLngLat([city.lon, city.lat])
             .addTo(map);
 
         // Store references
-        markers.push({ marker, city, popup, element: el, wrapper: wrapper });
+        markers.push({ marker, city, popup, element: el });
     });
 }
 
