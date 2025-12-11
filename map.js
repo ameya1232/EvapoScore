@@ -1,4 +1,4 @@
-// MapLibre Visualization for Capital Cities Evaporation Engine Analysis
+// MapLibre Visualization for 250+ Cities Evaporation Engine Analysis
 
 let map;
 let citiesData = [];
