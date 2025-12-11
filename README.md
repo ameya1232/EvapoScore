@@ -113,7 +113,7 @@ Optimal regions include:
 
 ## Technical Stuff
 
-Right now it estimates climate data based on where cities are located. I used Claude AI agents to pull real data from the Open-Meteo API for 250+ cities, but the code also has a fallback estimation method. Here's how you could fetch real data:
+Right now it estimates climate data based on where cities are located. I pulled real data from the Open-Meteo API for 250+ cities, but the code also has a fallback estimation method. Here's how you could fetch real data:
 
 ```javascript
 // Example API call structure (included in code)

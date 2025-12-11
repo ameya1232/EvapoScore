@@ -1,4 +1,4 @@
-# Global Analysis of Evaporation-Driven Engine Feasibility: A Comprehensive Study of 250+ World Cities
+# Global Analysis of Evaporation-Driven Engine Feasibility: A Study of 250+ World Cities
 
 **Live Demo:** https://evapo-score.vercel.app/
 
@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-This study presents a comprehensive global analysis of evaporation-driven engine feasibility across 250+ major cities worldwide. Using climate data and thermodynamic calculations based on the Penman Equation, we evaluated the theoretical maximum power output (W/m²) for each location. Our findings reveal significant geographic variation in engine performance, with arid regions showing up to 4× higher power potential than humid tropical zones.
+This study analyzes evaporation-driven engine feasibility across 250+ major cities worldwide. Using climate data and thermodynamic calculations based on the Penman Equation, we evaluated the theoretical maximum power output (W/m²) for each location. Our findings reveal significant geographic variation in engine performance, with arid regions showing up to 4× higher power potential than humid tropical zones.
 
 Key Findings:
 - Top-performing regions: Middle Eastern deserts (200-280 W/m²), North African Sahara (180-250 W/m²), Arabian Peninsula (200-270 W/m²)
@@ -37,7 +37,7 @@ This study addresses three primary objectives:
 
 ### 1.3 Significance
 
-Previous research on evaporation-driven engines has been limited to theoretical analyses of select U.S. locations. This study represents the first comprehensive global assessment, providing crucial data for:
+Previous research on evaporation-driven engines has been limited to theoretical analyses of select U.S. locations. This study provides data for:
 - Strategic deployment planning
 - Technology development priorities
 - Climate-appropriate engineering design
@@ -96,7 +96,7 @@ Where:
 
 High-resolution regional adjustments were applied to improve accuracy:
 
-Desert Regions (Enhanced Conditions):
+Desert Regions:
 - Sahara Desert: +8°C temperature, -40% humidity, +80 W/m² solar radiation
 - Arabian Peninsula: +10°C, -45% humidity, +100 W/m² solar radiation
 - SW United States: +5°C, -35% humidity, +60 W/m² solar radiation
@@ -496,7 +496,7 @@ Not Recommended:
 
 ## 7. Conclusions
 
-This comprehensive analysis of 250+ global cities reveals that evaporation-driven engines show strong commercial potential in arid and semi-arid regions, particularly the Middle East, North Africa, and desert regions of North America and Australia. The technology is fundamentally constrained by the availability of low-humidity environments and access to water surfaces, creating a geographic paradox where the best conditions exist in water-scarce regions.
+This analysis of 250+ global cities shows that evaporation-driven engines show strong commercial potential in arid and semi-arid regions, particularly the Middle East, North Africa, and desert regions of North America and Australia. The technology is fundamentally constrained by the availability of low-humidity environments and access to water surfaces, creating a geographic paradox where the best conditions exist in water-scarce regions.
 
 Key Takeaways:
 
@@ -514,7 +514,7 @@ Key Takeaways:
 
 **Future Outlook:**
 
-Evaporation-driven engines represent a promising addition to the renewable energy portfolio, particularly for water-rich arid regions. While not a universal solution, strategic deployment in optimal locations could contribute significantly to clean energy generation. Success will depend on continued material science improvements, cost reduction through scale, and intelligent integration with existing water management infrastructure.
+Evaporation-driven engines represent a promising addition to the renewable energy portfolio, particularly for water-rich arid regions. While not a universal solution, strategic deployment in optimal locations could contribute significantly to clean energy generation. Success will depend on continued material science improvements, cost reduction through scale, and integration with existing water management infrastructure.
 
 The technology's passive operation, zero emissions, and ability to generate power 24/7 (unlike solar) make it particularly attractive for baseload power generation in suitable climates. As water management and energy generation become increasingly interconnected challenges, evaporation-driven engines may play a crucial role in creating synergistic solutions.
 
@@ -524,7 +524,7 @@ The technology's passive operation, zero emissions, and ability to generate powe
 
 All code written manually and error handling/bug fixes by Ameya Meattle from UWC SEA (Singapore). The project is available at https://github.com/ameya1232/EvapoScore.git
 
-Data Collection: Claude AI agents were deployed to retrieve climate data from the Open-Meteo API for 250+ cities worldwide. The data collection process involved automated API calls to gather historical weather parameters including temperature, relative humidity, wind speed, and solar radiation for each analyzed location.
+Data Collection: Climate data was retrieved from the Open-Meteo API for 250+ cities worldwide. The data collection process involved API calls to gather historical weather parameters including temperature, relative humidity, wind speed, and solar radiation for each analyzed location.
 
 Special acknowledgment: Climate data for Beirut, Lebanon (33.89°N, 35.50°E) was provided by a WSS scholar from Beirut. This cross-WSS collaboration enabled accurate comparison between Mediterranean and tropical climate zones, enhancing the global analysis presented in Section 2.4.
 

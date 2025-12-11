@@ -1,4 +1,4 @@
-// MapLibre Visualization for 250+ Cities Evaporation Engine Analysis
+// Map visualization for evaporation engine analysis
 
 let map;
 let citiesData = [];
@@ -57,7 +57,7 @@ function estimateClimateData(lat, lon) {
         avgWindSpeed += 1;
     }
 
-    // Arabian Peninsula (Excellent conditions)
+    // Arabian Peninsula
     if (lat > 12 && lat < 32 && lon > 34 && lon < 60) {
         avgTemp += 10;
         avgHumidity -= 0.45;
@@ -86,7 +86,7 @@ function estimateClimateData(lat, lon) {
         avgSolarRadiation += 85;
     }
 
-    // HUMID REGIONS (Poor for evaporation engines)
+    // HUMID REGIONS
     // Southeast Asian Monsoon
     if (lat > -10 && lat < 30 && lon > 90 && lon < 140) {
         avgHumidity += 0.2;

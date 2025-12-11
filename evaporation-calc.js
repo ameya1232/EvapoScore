@@ -1,5 +1,5 @@
 // Evaporation Engine Power Calculator
-// Based on the Penman Equation and thermodynamic principles
+// Uses the Penman Equation
 
 class EvaporationCalculator {
     constructor() {

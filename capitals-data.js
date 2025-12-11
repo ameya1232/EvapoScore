@@ -1,4 +1,4 @@
-// Comprehensive World Cities Dataset - 250+ Cities
+// World Cities Dataset - 250+ Cities
 const capitalCities = [
     // === AFRICA ===
     // North Africa
