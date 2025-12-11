@@ -197,8 +197,8 @@ function createMarkers() {
         el.style.cursor = 'pointer';
         el.style.boxShadow = '0 2px 8px rgba(0,0,0,0.3)';
         el.style.transition = 'transform 0.2s ease';
-        el.style.position = 'relative';
         el.style.transformOrigin = 'center center';
+        el.style.display = 'block';
 
         // Create popup content
         const popupContent = `
@@ -244,12 +244,11 @@ function createMarkers() {
                 hoverTimeout = null;
             }
 
-            // Ensure marker stays visible and positioned correctly
+            // Ensure marker stays visible - don't change position
             el.style.display = 'block';
             el.style.visibility = 'visible';
             el.style.transform = 'scale(1.5)';
             el.style.zIndex = '1000';
-            el.style.position = 'relative';
 
             // Show popup
             if (!popup.isOpen()) {
@@ -259,12 +258,11 @@ function createMarkers() {
         });
 
         el.addEventListener('mouseleave', () => {
-            // Reset marker size but keep it visible and positioned
+            // Reset marker size but keep it visible - don't change position
             el.style.transform = 'scale(1)';
             el.style.zIndex = '1';
             el.style.display = 'block';
             el.style.visibility = 'visible';
-            el.style.position = 'relative';
 
             // Immediately remove popup when leaving marker
             hoverTimeout = setTimeout(() => {
