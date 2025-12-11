@@ -181,6 +181,12 @@ async function loadCitiesData() {
 
 function createMarkers() {
     citiesData.forEach(city => {
+        // Create wrapper to prevent positioning issues
+        const wrapper = document.createElement('div');
+        wrapper.style.position = 'relative';
+        wrapper.style.width = '0';
+        wrapper.style.height = '0';
+        
         const el = document.createElement('div');
         el.className = 'marker';
 
@@ -199,6 +205,13 @@ function createMarkers() {
         el.style.transition = 'transform 0.2s ease';
         el.style.transformOrigin = 'center center';
         el.style.display = 'block';
+        el.style.position = 'absolute';
+        el.style.left = '50%';
+        el.style.top = '50%';
+        el.style.marginLeft = `-${size/2}px`;
+        el.style.marginTop = `-${size/2}px`;
+        
+        wrapper.appendChild(el);
 
         // Create popup content
         const popupContent = `
@@ -237,16 +250,14 @@ function createMarkers() {
         let hoverTimeout = null;
 
         // Show popup on hover
-        el.addEventListener('mouseenter', () => {
+        wrapper.addEventListener('mouseenter', () => {
             // Clear any pending hide timeout
             if (hoverTimeout) {
                 clearTimeout(hoverTimeout);
                 hoverTimeout = null;
             }
 
-            // Ensure marker stays visible - don't change position
-            el.style.display = 'block';
-            el.style.visibility = 'visible';
+            // Scale marker without affecting position
             el.style.transform = 'scale(1.5)';
             el.style.zIndex = '1000';
 
@@ -257,20 +268,16 @@ function createMarkers() {
             currentPopup = popup;
         });
 
-        el.addEventListener('mouseleave', () => {
-            // Reset marker size but keep it visible - don't change position
+        wrapper.addEventListener('mouseleave', () => {
+            // Reset marker size
             el.style.transform = 'scale(1)';
             el.style.zIndex = '1';
-            el.style.display = 'block';
-            el.style.visibility = 'visible';
 
-            // Immediately remove popup when leaving marker
-            hoverTimeout = setTimeout(() => {
-                if (popup.isOpen()) {
-                    popup.remove();
-                    currentPopup = null;
-                }
-            }, 100);
+            // Remove popup immediately when leaving
+            if (popup.isOpen()) {
+                popup.remove();
+                currentPopup = null;
+            }
         });
 
         // Keep popup open when hovering over it
@@ -295,12 +302,12 @@ function createMarkers() {
             }
         });
 
-        const marker = new maplibregl.Marker({ element: el })
+        const marker = new maplibregl.Marker({ element: wrapper })
             .setLngLat([city.lon, city.lat])
             .addTo(map);
 
         // Store references
-        markers.push({ marker, city, popup, element: el });
+        markers.push({ marker, city, popup, element: el, wrapper: wrapper });
     });
 }
 
